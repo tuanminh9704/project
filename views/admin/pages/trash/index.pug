@@ -1,0 +1,87 @@
+extends ../../layouts/default.pug
+include ../../mixins/show-alert
+include ../../mixins/form-change-multi
+
+block main
+  +show-alert-success(5000)
+  +show-alert-error(5000)  
+  h1(class="mb-4") #{pageTitle}
+  table.table.table-hover.table-sm(checkbox-multi)
+    thead
+      tr
+        td
+          input(
+            type="checkbox"
+            name="checkall"
+          )
+        th STT
+        th Hình ảnh
+        th Tiêu đề
+        th Hành động    
+    tbody
+      each item, index in products
+        tr 
+          td
+            input(
+              type="checkbox"
+              name="id"
+              value=item.id
+            )  
+          td #{index + 1}
+          td
+            img(
+              src=item.thumbnail
+              alt=item.title
+              width="100px"
+              height="auto"
+            )
+          td #{item.title}
+          td
+            button(class="btn btn-warning btn-sm", data-id=item.id button-restore) Khôi phục
+            button(class="btn btn-danger btn-sm ml-1", data-id=item.id button-delete-permanent) Xóa vĩnh viễn
+
+  .block.mt-3
+    .row
+      .col-6
+        button.btn.btn-danger.btn-sm(
+          button-delete-all-modal  
+          type="button"
+          data-toggle="modal"
+          data-target="#deleteAllModal"
+        ) Xóa vĩnh viễn các sản phẩm đã chọn
+      .col-6.text-right
+        button.btn.btn-success.btn-sm(
+          button-restore-all
+          type="button"
+          data-toggle="modal"
+          data-target="#restoreAllModal"
+        ) Khôi Phục Tất Cả
+      form(
+          action=""
+          method="POST"
+          form-restore
+          data-path=`/${prefixAdmin}/trash/restore`
+      )
+
+      form(
+          action=""
+          method="POST"
+          form-delete
+          data-path=`/${prefixAdmin}/trash/delete`
+      )
+
+
+      form(
+          action=""
+          method="POST"
+          form-delete-permanent 
+          data-path=`/${prefixAdmin}/trash/delete-all`
+      )
+
+      form(
+          action = ""
+          method="POST"
+          form-restore-all
+          data-path=`/${prefixAdmin}/trash/restore-all`
+      )
+        
