@@ -1,11 +1,21 @@
 const { query } = require("express");
 const Product = require("../../models/products");
+const Account = require("../../models/account");
 
 //[GET] /admin/trash
 module.exports.index = async (req, res) => {
     const products = await Product.find({
         deleted: true,
     })
+    for(let i = 0; i < products.length; i++){
+        if(products[i].deletedBy.account_id){
+            const account = await Account.findOne({
+                _id: products[i].deletedBy.account_id,
+                
+            })
+            products[i].deletedBy.fullName = account.fullName;
+        }
+    }
     res.render("admin/pages/trash/index", {
         pageTitle: "Thùng rác",
         products: products

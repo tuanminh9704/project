@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/show-alert
 include ../../mixins/form-change-multi
+include ../../mixins/moment.pug
 
 block main
   +show-alert-success(5000)
@@ -17,6 +18,7 @@ block main
         th STT
         th Hình ảnh
         th Tiêu đề
+        th Người xóa
         th Hành động    
     tbody
       each item, index in products
@@ -36,6 +38,10 @@ block main
               height="auto"
             )
           td #{item.title}
+          td
+            id(item.deletedBy.fullName)
+              div #{item.deletedBy.fullName}
+              +formatDateTime(item.deleteAt)
           td
             button(class="btn btn-warning btn-sm", data-id=item.id button-restore) Khôi phục
             button(class="btn btn-danger btn-sm ml-1", data-id=item.id button-delete-permanent) Xóa vĩnh viễn

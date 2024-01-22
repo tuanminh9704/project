@@ -1,4 +1,5 @@
 const Product = require("../../models/products");
+const Account = require("../../models/account");
 const filterStatusHelper = require("../../helpers/filterStatus");
 const objectSearchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
@@ -31,11 +32,34 @@ module.exports.index = async (req, res) => {
     // pagination
     const countProduct = await Product.countDocuments(find); // tổng số sản phẩm trong csdl
     const objectPagination = paginationHelper(objectPaginationInit, req.query, countProduct);
-    
+    //SORT
+    const sort = {
+
+    }
+
+    if(req.query.sortKey && req.query.sortValue){
+      sort[req.query.sortKey] =  req.query.sortValue;
+    }
+    else{
+      sort["position"] = "desc"
+    }
+    // END SORT
     const products = await Product.find(find)
-    .sort({ position: 'desc' })
+    .sort(sort)
     .limit(objectPagination.limitPage)
     .skip(objectPagination.skip);
+
+    for(let i = 0 ; i < products.length; i++){
+      if(products[i].createdBy.account_id){
+        const account = await Account.findOne({
+          _id: products[i].createdBy.account_id
+        })
+        products[i].createdBy.fullName = account.fullName;
+      }
+    }
+
+    // console.log(res.locals.user.id); Lấy id từ middlewares khi đăng nhập vào
+
 
     res.render("admin/pages/product/index", {
         pageTitle: "Trang quản lý sản phẩm",
@@ -113,9 +137,13 @@ module.exports.changeMulti = async (req, res) => {
 //[DELETE] /admin/products/delete/:id
 module.exports.delete = async (req, res) => {
   const id = req.params.id;
-  // console.log(id);
 
-  await Product.updateOne({_id: id}, {deleted: true, deletedAt: new Date()});
+  const objectdeletedBy = {
+    account_id: res.locals.user.id,
+    deletedAt: new Date()
+  }
+
+  await Product.updateOne({_id: id}, {deleted: true, deletedBy: objectdeletedBy});
 
   req.flash("success", "Xóa sản phẩm thành công!");
 
@@ -143,10 +171,14 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  console.log(req.file);
+  // console.log(req.file);
 
   if(req.file && req.file.filename) {
     req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+
+  req.body.createdBy = {
+    account_id: res.locals.user.id
   }
 
   const product = new Product(req.body);

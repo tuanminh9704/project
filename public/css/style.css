@@ -1,6 +1,7 @@
 /* Header */
 .header {
     border-bottom: 1px solid #ddd;
+    color: black;
     padding: 10px 0;
   }
   
@@ -8,7 +9,7 @@
     max-height: 50px;
     max-width: 100%;
   }
-  
+  `
   .header .inner-menu > ul {
     list-style: none;
     padding: 0;
@@ -133,6 +134,9 @@
   max-width: 100%; /* Hình ảnh không vượt quá kích thước của phần tử chứa */
   height: auto; /* Đảm bảo tỷ lệ khung hình bảo toàn */
 }
+
+
+
 
 
   

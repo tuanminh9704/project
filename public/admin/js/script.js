@@ -384,3 +384,49 @@ if(buttonRestoreAll){
   });
 }
 // End Button Restore All
+
+
+// sort by criteria
+
+const sort = document.querySelector("[sort]");
+  // sort
+if(sort){
+  const url = new URL(window.location.href);
+  console.log(url);
+  const sortSelect = sort.querySelector("[sort-select]");
+  const sortClear = sort.querySelector("[sort-clear]");
+  sortSelect.addEventListener("change", () => {
+    const [sortKey, sortValue] = sortSelect.value.split("-");
+    url.searchParams.set("sortKey", sortKey);
+    url.searchParams.set("sortValue", sortValue);
+
+    window.location.href = url.href;
+  });
+  // end sort
+
+  // Button Clear Sort
+  sortClear.addEventListener("click", () => {
+    url.searchParams.delete("sortKey");
+    url.searchParams.delete("sortValue");
+    window.location.href = url.href;
+  })
+
+// End Button Clear Sort
+
+// sort selected
+
+  const sortKey = url.searchParams.get("sortKey");
+  const sortValue = url.searchParams.get("sortValue");
+
+  const stringSort = `${sortKey}-${sortValue}`;
+  const optionSelected = sortSelect.querySelector(`option[value='${stringSort}']`);
+  console.log(optionSelected);
+
+  optionSelected.selected = true;
+
+// end sort selected
+
+}
+// End sort by criteria
+
+

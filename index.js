@@ -1,10 +1,12 @@
 const express = require("express");
+const path = require("path");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
 const systemConfig = require("./configs/system"); // Biến cấu hình để tạo biến locals
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const moment = require("moment");
 
 // Cấu hình file env sử dụng thư viện dotenv
 const dotenv = require("dotenv");
@@ -30,6 +32,10 @@ app.use(methodOverride("_method"));
 // Sử dụng thư viện body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// tinymce 
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+//
+// End tinymce
 // Flash
 // app.use(express.cookieParser("HFEHFJFSHF"));
 app.use(cookieParser("HFJNDJFKDKFK"));
@@ -43,6 +49,7 @@ app.set("view engine", "pug");
 
 // Tạo biến dưới local có thể sử dụng được ở pug
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment
 
 // Router
 clientRoute(app);

@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const uploadMulterHelper = require("../../helpers/uploadMulter");
-const upload = multer({storage: uploadMulterHelper()});
+// const uploadMulterHelper = require("../../helpers/uploadMulter");
+const upload = multer();
 const validate = require("../../validates/admin/product.validate");
 const controller = require("../../controllers/admin/product.controller");
+
+const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
 
 router.get("/", controller.index);
@@ -17,11 +19,11 @@ router.delete("/delete/:id", controller.delete);
 
 router.get("/create", controller.create);
 
-router.post("/create", upload.single("thumbnail"), validate.createPost, controller.createPost);
+router.post("/create", upload.single("thumbnail"), uploadCloud.uploadSingle, validate.createPost, controller.createPost);
 
 router.get("/edit/:id", controller.edit);
 
-router.patch("/edit/:id", upload.single("thumbnail"), validate.createPost, controller.editPatch);
+router.patch("/edit/:id", upload.single("thumbnail"), uploadCloud.uploadSingle, validate.createPost, controller.editPatch);
 
 router.get("/detail/:id", controller.detail);
 
