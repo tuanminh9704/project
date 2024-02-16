@@ -27,7 +27,7 @@ mixin table-tree(records, level = 1)
             class="badge badge-success"
             data-status="active"
             data-id=item.id
-            button-change-status
+            button-change-status-category
           ) Hoạt động
         else
           a(
@@ -35,7 +35,7 @@ mixin table-tree(records, level = 1)
             class="badge badge-danger"
             data-status="inactive"
             data-id=item.id
-            button-change-status
+            button-change-status-category
           ) Dừng hoạt động
       td
         a(

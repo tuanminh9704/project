@@ -1,12 +1,20 @@
 extends ../../layouts/default.pug
 include ../../mixins/show-alert.pug
 include ../../mixins/table-tree.pug
+include ../../mixins/filter-status.pug
 
 block main
   +show-alert-success(5000)
   if(role.permissions.includes("products-category_view"))
 
     h1(class="mb-4") Danh mục sản phẩm
+
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filter-status(filterStatus)
 
     .card.mb-3
       .card-header Danh sách
@@ -35,3 +43,12 @@ block main
               +table-tree(newRecords)
   else  
     h1 Không thể truy cập trang này, vui lòng quay lại!
+  
+  form(
+    form-change-status-category
+    action=""
+    method="POST"
+    data-path=`/${prefixAdmin}/productsCategory/change-status`
+  )
+  script(src="/admin/js/product-category.js") 
+  

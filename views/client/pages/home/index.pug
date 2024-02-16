@@ -1,3 +1,11 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product-grid.pug
+
 block main  
-  h1 Trang chủ
+  .container.my-3
+  .row
+    .col-12
+      +box-head("Trang chủ")
+
+  +product-grid(featuredProducts)

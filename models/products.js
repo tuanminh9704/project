@@ -10,11 +10,16 @@ const productSchema = new mongoose.Schema({
     unique: true,
   },
   description: String,
+  product_category_id: {
+    type: String,
+    default: ""
+  },
   price: Number,
   discountPercentage: Number,
   stock: Number,  
   thumbnail: String,
   status: String,
+  featured: String,
   position: Number,
   deleted: {
     type: Boolean,

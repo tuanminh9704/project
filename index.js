@@ -24,7 +24,7 @@ const database = require("./configs/database");
 database.connect();
 
 // Nhúng file tĩnh
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // Thay đổi phương thức sử dụng thư viện method-override
 app.use(methodOverride("_method"));
@@ -54,6 +54,14 @@ app.locals.moment = moment
 // Router
 clientRoute(app);
 adminRoute(app);
+
+//404
+app.get("*", (req, res) => {
+  res.render("client/pages/errors/404", {
+    pageTitle: "404 Not Found",
+  });
+  // res.redirect("/");
+});
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
