@@ -2,18 +2,29 @@ const ProductCategory = require("../../models/productsCategory");
 const systemConfig = require("../../configs/system");
 const treeHelpers = require("../../helpers/tree");
 const filterStatusHelpers = require("../../helpers/filterStatus");
+const searchHelpers = require("../../helpers/search");
 
 //[GET] /admin/productsCategory
 module.exports.index = async (req, res) => {
-
-    // Filter status
-    // console.log(req.query.status);
-
-    const filterStatus = filterStatusHelpers(req.query);
-
     const find ={
         deleted : false,
     };
+
+    // Search
+    const objectSearch = searchHelpers(req.query);
+
+    // console.log(objectSearch);
+    if(req.query.keyword){
+        find.title = objectSearch.regex;
+    }
+
+    // End Search
+
+
+    // Filter status
+
+    const filterStatus = filterStatusHelpers(req.query);
+
 
     if(req.query.status){
         find.status = req.query.status;
@@ -27,6 +38,7 @@ module.exports.index = async (req, res) => {
     res.render("admin/pages/product-category/index", {
         newRecords: newRecords,
         filterStatus: filterStatus,
+        keyword: req.query.keyword,
         pageTitle: "Danh mục sản phẩm"
     })
 }

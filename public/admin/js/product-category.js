@@ -72,5 +72,29 @@ if(buttonFilterStatus.length > 0){
   })
 }
 
-
 // End Filter Status
+
+// Search
+
+const formSearchCategory = document.querySelector("#form-search");
+
+if(formSearchCategory){
+  const url = new URL(window.location.href);
+  formSearchCategory.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const keyword = event.target.elements.keyword.value;
+
+    if(keyword){
+      url.searchParams.set("keyword", keyword);
+    }
+    else{
+      url.searchParams.delete("keyword");
+    }
+
+    window.location.href = url;
+  })
+}
+
+
+// End Search

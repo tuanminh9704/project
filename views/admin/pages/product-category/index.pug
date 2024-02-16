@@ -2,6 +2,7 @@ extends ../../layouts/default.pug
 include ../../mixins/show-alert.pug
 include ../../mixins/table-tree.pug
 include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
 
 block main
   +show-alert-success(5000)
@@ -15,6 +16,8 @@ block main
         .row
           .col-6
             +filter-status(filterStatus)
+          .col-6
+            +search(keyword)
 
     .card.mb-3
       .card-header Danh sách
