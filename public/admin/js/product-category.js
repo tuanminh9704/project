@@ -98,3 +98,71 @@ if(formSearchCategory){
 
 
 // End Search
+
+
+// Check box 
+
+const checkBoxMulti = document.querySelector("[checkbox-multi]");
+
+if(checkBoxMulti){
+  const checkBoxAll = checkBoxMulti.querySelector("input[name='checkall']");
+  const checkBoxId = checkBoxMulti.querySelectorAll("input[name='id']");
+
+  checkBoxAll.addEventListener("click", () => {
+    if(checkBoxAll.checked == true){
+      checkBoxId.forEach(input => {
+        input.checked = true;
+      })
+    }
+    else{
+      checkBoxId.forEach(input => {
+        input.checked = false;
+      })
+    }
+  })
+
+  checkBoxId.forEach(input => {
+    input.addEventListener("click", () => {
+      const countChecked = checkBoxMulti.querySelectorAll("input[name='id']:checked").length;
+
+      // console.log(countChecked);
+
+      if(countChecked.length == checkBoxId){
+        checkBoxAll.checked = true;
+      }
+      else{
+        checkBoxAll.checked = false;
+      }
+    })
+  })
+}
+
+// End check box
+
+// Form change multi
+
+const formChangeMultiCategory = document.querySelector("[form-change-multi]");
+
+// console.log(formChangeMulti);
+if(formChangeMultiCategory){
+  formChangeMultiCategory.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const boxChecked = document.querySelectorAll("input[name='id']:checked");
+
+    if(boxChecked.length > 0){
+      const ids = [];
+      const inputIds = formChangeMultiCategory.querySelector("input[name='ids']");
+      
+      boxChecked.forEach(input => {
+        const id = input.value;
+        ids.push(id);
+        inputIds.value = ids.join(", ");
+
+        formChangeMultiCategory.submit();
+      })
+    }
+  })
+}
+
+// End form change multi

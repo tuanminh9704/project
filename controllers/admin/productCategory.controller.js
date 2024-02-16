@@ -4,6 +4,7 @@ const treeHelpers = require("../../helpers/tree");
 const filterStatusHelpers = require("../../helpers/filterStatus");
 const searchHelpers = require("../../helpers/search");
 
+
 //[GET] /admin/productsCategory
 module.exports.index = async (req, res) => {
     const find ={
@@ -80,6 +81,28 @@ module.exports.changeStatus = async (req, res) => {
     await ProductCategory.updateOne({_id : id}, {status: status});
 
     req.flash("success", "Cập nhật trạng thái bản ghi thành công!");
+
+    res.redirect("back");
+}
+
+//[PATCH] /admin/productsCategory/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const ids = req.body.ids.split(", ");
+    const type = req.body.type;
+
+    switch (type) {
+        case "active":
+        case "inactive":
+            await ProductCategory.updateMany({
+                _id: {$in: ids}
+            }, {
+                status: type
+            })
+            break;
+    
+        default:
+            break;
+    }
 
     res.redirect("back");
 }
