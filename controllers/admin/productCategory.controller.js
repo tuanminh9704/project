@@ -104,5 +104,78 @@ module.exports.changeMulti = async (req, res) => {
             break;
     }
 
+    res.redirect("back");   
+}
+
+//[GET] /admin/productsCategory/detail/:id
+module.exports.detail = async (req, res) => {
+    const id = req.params.id;
+    // console.log(id);
+    const productCategoryDetail = await ProductCategory.findOne({
+        _id: id,
+    })
+
+    res.render("admin/pages/product-category/detail", {
+        pageTitle: productCategoryDetail.title,
+        productCategoryDetail: productCategoryDetail,
+    })
+}
+
+//[DELETE] /admin/productsCategory/delete/:id
+module.exports.delete = async (req, res) => {
+    const id = req.params.id;
+
+    await ProductCategory.updateOne({
+        _id: id,
+    }, {
+        deleted: true,
+    })
+    req.flash("success", "Xóa thành công danh mục!");
+    res.redirect("back");
+}
+
+//[GET] /admin/productsCategory/èdit/:id
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+
+    const productCategory = await ProductCategory.findOne({
+        _id: id,
+    })
+
+    // const currentParentCategory = await ProductCategory.findOne({
+    //     _id: ""
+    // })
+
+    // console.log(currentParentCategory);
+
+    const arrProductsCategory = await ProductCategory.find({
+        deleted: false,
+    })
+    const records = treeHelpers.tree(arrProductsCategory);
+
+    res.render("admin/pages/product-category/edit", {
+        pageTitle: "Chỉnh sửa danh mục sản phẩm",
+        productCategory: productCategory,
+        records: records,
+        // currentParentCategory: currentParentCategory,
+    })
+
+}
+
+// [PATCH] /admin/productsCategory/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    // console.log(id);
+    req.body.position = parseInt(req.body.position);
+
+    if(req.file && req.file.filename) {
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    }
+
+    // console.log(req.body);
+    await ProductCategory.updateOne({
+        _id: id,
+    }, req.body)
+    
     res.redirect("back");
 }

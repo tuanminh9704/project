@@ -29,19 +29,19 @@ if(buttonChangeStatusCategory.length > 0){
 
 // Show Alert
 
-const showAlert = document.querySelector("[show-alert]");
+const showAlertCategory = document.querySelector("[show-alert]");
 
-if(showAlert){
+if(showAlertCategory){
   const dataTime = showAlert.getAttribute("data-time");
   // console.log(dataTime);
   setTimeout(() => {
-    showAlert.classList.add("alert-hidden");
+    showAlertCategory.classList.add("alert-hidden");
   }, dataTime);
 
-  const closeAlert = showAlert.querySelector("[close-alert]");
+  const closeAlert = showAlertCategory.querySelector("[close-alert]");
 
   closeAlert.addEventListener("click", () => {
-    showAlert.classList.add("alert-hidden");
+    showAlertCategory.classList.add("alert-hidden");
   })
 }
 
@@ -166,3 +166,28 @@ if(formChangeMultiCategory){
 }
 
 // End form change multi
+
+
+
+// Button Delete Category
+
+const buttonDeleteCategory = document.querySelectorAll("[button-delete-category]");
+
+if(buttonDeleteCategory.length > 0){
+  const formDeleteCategory = document.querySelector("[form-delete-category]");
+  const path = formDeleteCategory.getAttribute("data-path");
+
+  buttonDeleteCategory.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("data-id");
+
+      const action = path + `/${id}?_method=DELETE`;
+
+      formDeleteCategory.action = action;
+
+      formDeleteCategory.submit();
+    })
+  })
+}
+
+// End Button Delete Category
