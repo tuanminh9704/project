@@ -59,6 +59,12 @@ module.exports.loginPost = async (req, res) => {
         email: email,
         deleted: false
     })
+    
+    if(!existUser){
+        req.flash("error", "Email hoặc mật khẩu không chính xác!");
+        res.redirect("back");
+        return;
+    }
 
     if(existUser.status !== "active"){
         req.flash("error", "Tài khoản bị khóa!");
